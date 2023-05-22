@@ -1,0 +1,22 @@
+.nav {
+  display: flex;
+  justify-content: right;
+  padding: 7px;
+}
+
+.navbutton {
+  background: transparent;
+  color: white;
+  border: none;
+  padding: 6px;
+}
+
+.navbutton.active {
+  border: 2px solid white;
+  border-radius: 10px;
+  color: white;
+}
+
+.navbar-nav{
+  padding-left: 10px;
+}

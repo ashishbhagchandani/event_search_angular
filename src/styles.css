@@ -1,0 +1,42 @@
+body {
+  background: url("/assets/background.jpg") no-repeat fixed center;
+  background-size: cover;
+  height: 100%;
+  width: 100%;
+}
+
+body {
+  margin: 0px 0px 70px 0px;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+}
+
+[mat-align-tabs="center"] > .mat-mdc-tab-header .mat-mdc-tab-labels {
+  background-color: rgb(63, 141, 124);
+}
+
+.mat-mdc-tab:not(.mat-mdc-tab-disabled).mdc-tab--active .mdc-tab__text-label {
+  color: white;
+}
+
+.mat-mdc-tab .mdc-tab__text-label {
+  color: rgb(168, 205, 197);
+}
+.mat-mdc-tab-body-content {
+  overflow: hidden !important;
+}
+.carousel-control-prev-icon {
+  filter: invert(100%);
+}
+.carousel-control-next-icon {
+  filter: invert(100%);
+}
+.mat-mdc-progress-spinner .mdc-circular-progress__determinate-circle,
+.mat-mdc-progress-spinner .mdc-circular-progress__indeterminate-circle-graphic {
+  stroke: #db1334 !important;
+}
+.mdc-tab {
+  padding: 0px;
+  max-width: 10vw;
+}
+
+@import "~@fortawesome/fontawesome-free/css/all.css";

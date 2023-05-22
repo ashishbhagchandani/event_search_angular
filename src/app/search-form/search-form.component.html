@@ -1,0 +1,135 @@
+<div style="margin-bottom: 15vh" class="container-fluid mt-4">
+  <div class="bg-text text-light p-3 mx-auto">
+    <h1 class="header mt-5 mb-4">Events Search</h1>
+    <hr />
+    <div class="form">
+      <form
+        ngNativeValidate
+        #myForm="ngForm"
+        (ngSubmit)="onSubmit(myForm)"
+        class="row g-3"
+      >
+        <div class="col-md-12">
+          <label for="keyword" class="form-label keyword required-field"
+            >Keyword</label
+          >
+          <input
+            matInput
+            [matAutocomplete]="auto"
+            [formControl]="searchKeyword"
+            type="text"
+            class="form-control"
+            id="keyword"
+            name="keyword"
+            [(ngModel)]="keyword"
+            value="keyword"
+            required
+          />
+        </div>
+        <mat-autocomplete
+          [panelWidth]="400"
+          #auto="matAutocomplete"
+          (optionSelected)="onSelected()"
+        >
+          <mat-option *ngIf="isLoading"
+            ><div
+              class="spinner-border"
+              style="width: 25px; height: 25px; color: rgb(66, 66, 154)"
+              role="status"
+            ></div
+          ></mat-option>
+          <ng-container *ngIf="!isLoading">
+            <mat-option *ngFor="let key of filteredKeyword" [value]="key.name">
+              <span
+                ><p>{{ key.name }}</p>
+              </span>
+            </mat-option>
+          </ng-container>
+        </mat-autocomplete>
+        <div class="col-md-6">
+          <label for="distance" class="form-label keyword required-field"
+            >Distance</label
+          >
+          <input
+            type="number"
+            value="10"
+            class="form-control"
+            id="distance"
+            name="distance"
+            [(ngModel)]="distance"
+            #distanceInput
+          />
+        </div>
+        <div class="col-6">
+          <label for="category" class="form-label keyword required-field"
+            >Category</label
+          >
+          <select
+            id="category"
+            class="form-select"
+            style="max-width: 210px"
+            name="category"
+            [(ngModel)]="category"
+            #categoryInput
+          >
+            <option class="optioncolor" value="default">Default</option>
+            <option class="optioncolor" value="music">Music</option>
+            <option class="optioncolor" value="sports">Sports</option>
+            <option class="optioncolor" value="artsTheatre">
+              Arts & Theatre
+            </option>
+            <option class="optioncolor" value="film">Film</option>
+            <option class="optioncolor" value="miscellaneous">
+              Miscellaneous
+            </option>
+          </select>
+        </div>
+        <div class="col-md-12">
+          <label for="location" class="form-label keyword required-field"
+            >Location</label
+          >
+          <input
+            type="text"
+            class="form-control"
+            id="location"
+            name="location"
+            [(ngModel)]="location"
+            #locationInput
+            [disabled]="locationcheck"
+            [class.disabled]="locationcheck"
+            required
+          />
+        </div>
+        <div class="col-12">
+          <div class="form-check">
+            <input
+              class="form-check-input keyword"
+              type="checkbox"
+              id="gridCheck"
+              name="locationcheck"
+              [(ngModel)]="locationcheck"
+              (change)="onAutoDetectLocationChange($event.target)"
+            />
+            <label class="form-check-label keyword" for="gridCheck">
+              Auto-detect your location
+            </label>
+          </div>
+        </div>
+        <div class="col-12 d-flex justify-content-center mb-5">
+          <button type="submit" class="btn btn-primary searchbutton">
+            SUBMIT
+          </button>
+          <button
+            type="button"
+            (click)="clear(myForm, distanceInput, categoryInput)"
+            class="btn btn-primary ms-3 clearbutton"
+          >
+            CLEAR
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<event-table></event-table>

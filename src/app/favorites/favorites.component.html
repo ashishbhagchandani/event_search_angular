@@ -1,0 +1,66 @@
+<div *ngIf="storedFavorites && storedFavorites.length > 0">
+  <div class="text-center container">
+    <h5 class="mb-4" style="color: rgb(84, 218, 189)">
+      List of your favorite events
+    </h5>
+  </div>
+  <div class="table-responsive px-3 col-12 col-sm-12 col-lg-7 container">
+    <table
+      class="table table-hover table-light table-striped container text-center"
+    >
+      <thead>
+        <tr>
+          <th style="width: 5%" scope="col">#</th>
+          <th style="width: 25%" scope="col">Date</th>
+          <th style="width: 30%" scope="col">Event</th>
+          <th style="width: 25%" scope="col">Category</th>
+          <th style="width: 25%" scope="col">Venue</th>
+          <th style="width: 15%" scope="col">Favorite</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr></tr>
+        <tr *ngFor="let item of storedFavorites; let i = index">
+          <td scope="row">
+            <p style="font-weight: 900">{{ i + 1 }}</p>
+          </td>
+          <td>{{ item.date }}</td>
+          <td>{{ item.eventtitle }}</td>
+          <td>{{ item.genre }}</td>
+          <td>{{ item.venue }}</td>
+          <td>
+            <a (click)="deletefav(item.id)">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="20"
+                height="20"
+                fill="currentColor"
+                class="bi bi-trash"
+                viewBox="0 0 16 16"
+              >
+                <path
+                  d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z"
+                />
+                <path
+                  fill-rule="evenodd"
+                  d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z"
+                />
+              </svg>
+            </a>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<ng-container *ngIf="!storedFavorites || storedFavorites.length === 0">
+  <div class="d-flex align-items-center justify-content-center">
+    <div
+      style="border-radius: 50px"
+      class="col-md-6 text-center bg-white mt-5 mb-5 px-4"
+    >
+      <p class="favnote text-danger m-0">No favorite events to show</p>
+    </div>
+  </div>
+</ng-container>

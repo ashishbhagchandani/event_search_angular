@@ -1,0 +1,509 @@
+<div
+  class="table-responsive col-12 col-sm-12 col-lg-9 container"
+  *ngIf="eventData.length > 0 && !openEventDetail && !close"
+>
+  <table class="table table-striped table-dark container text-center">
+    <thead>
+      <tr>
+        <th style="font-weight: 600">Date/Time</th>
+        <th style="font-weight: 600">Icon</th>
+        <th style="font-weight: 600">Event</th>
+        <th style="font-weight: 600">Genre</th>
+        <th style="font-weight: 600">Venue</th>
+      </tr>
+    </thead>
+    <tbody>
+      <ng-container *ngIf="eventData.length > 0">
+        <tr
+          style="cursor: pointer"
+          (click)="eventDetail(event.id)"
+          *ngFor="let event of eventData"
+        >
+          <td style="width: 15%">
+            <p class="mb-0" style="font-weight: 600">
+              {{ event.dates.start.localDate }}
+            </p>
+            <p style="font-weight: 600">{{ event.dates.start.localTime }}</p>
+          </td>
+          <td style="width: 15%">
+            <img
+              *ngIf="event.images[0].url"
+              [src]="event.images[0].url"
+              width="70"
+              height="70"
+            />
+          </td>
+          <td>
+            <a class="eventpointer text-white">{{
+              event.name && event.name != "Undefined" ? event.name : ""
+            }}</a>
+          </td>
+          <td style="width: 20%">
+            {{
+              event.classifications[0].segment.name &&
+              event.classifications[0].segment.name != "Undefined"
+                ? event.classifications[0].segment.name
+                : ""
+            }}
+          </td>
+          <td style="width: 20%">
+            {{
+              event._embedded.venues[0].name &&
+              event._embedded.venues[0].name != "Undefined"
+                ? event._embedded.venues[0].name
+                : ""
+            }}
+          </td>
+        </tr>
+      </ng-container>
+      <ng-container *ngIf="eventData.length === 0">
+        <tr>
+          <td colspan="5">No events found.</td>
+        </tr>
+      </ng-container>
+    </tbody>
+  </table>
+</div>
+
+<div
+  *ngIf="eventData.length === 0 && !close"
+  class="d-flex align-items-center justify-content-center"
+>
+  <div
+    style="min-width: 45vw"
+    class="col-md-6 text-center bg-white roundedc mt-5 mb-5"
+  >
+    <h6 style="font-size: 17px" class="text-danger m-0">
+      No results available
+    </h6>
+  </div>
+</div>
+
+<div class="container" *ngIf="openEventDetail && !close">
+  <div class="bg-text-tab text-light mx-auto">
+    <div class="p-3">
+      <span style="font-size: 14px" class="bi bi-chevron-left"></span>
+      <button (click)="backEvent(false)" class="btn backbutton">Back</button>
+    </div>
+    <div class="d-flex flex-row align-items-center justify-content-center pl-2">
+      <h2 style="padding-left: 10px" class="header mt-5 mb-5 mr-3">
+        {{ eventtitle }}
+        <button
+          type="button"
+          class="btn btn-link"
+          (click)="onClick(eventid, date, eventtitle, genre, venue)"
+        >
+          <i
+            *ngIf="isLiked"
+            class="bi bi-heart-fill text-danger bg-white rounded-circle p-2 fs-5"
+          ></i>
+          <i
+            *ngIf="!isLiked"
+            class="bi bi-heart bg-white rounded-circle text-black p-2 fs-5"
+          ></i>
+        </button>
+      </h2>
+    </div>
+    <mat-tab-group mat-align-tabs="center">
+      <mat-tab style="max-width: 10vw" label="Events">
+        <div style="overflow: hidden">
+          <div
+            class="d-flex flex-column flex-sm-row justify-content-center align-items-center px-4"
+          >
+            <div class="pt-3 px-4 text-center order-1 order-sm-1 col-sm-5">
+              <div
+                *ngIf="date"
+                class="d-flex align-items-center flex-column mb-3"
+              >
+                <div class="subtitle"><h5>Date</h5></div>
+                <h6 class="getfont">{{ date }}</h6>
+              </div>
+              <div
+                *ngIf="artist"
+                class="d-flex align-items-center flex-column mb-3"
+              >
+                <div class="subtitle"><h5>Artist/Team</h5></div>
+                <div
+                  class="d-flex justify-content-center align-items-center getfont"
+                  [innerHTML]="artist"
+                ></div>
+              </div>
+              <div
+                *ngIf="venue"
+                class="d-flex align-items-center flex-column mb-3"
+              >
+                <div class="subtitle"><h5>Venue</h5></div>
+                <h6 class="getfont">{{ venue }}</h6>
+              </div>
+              <div
+                *ngIf="genre"
+                class="d-flex align-items-center flex-column mb-3"
+              >
+                <div class="subtitle"><h5>Genres</h5></div>
+                <h6 class="getfont">{{ genre }}</h6>
+              </div>
+              <div
+                *ngIf="price"
+                class="d-flex align-items-center flex-column mb-3"
+              >
+                <div class="subtitle"><h5>Price Ranges</h5></div>
+                <h6 class="getfont">{{ price }}</h6>
+              </div>
+              <div
+                *ngIf="statuscode"
+                class="d-flex align-items-center flex-column mb-3"
+              >
+                <div class="subtitle"><h5>Ticket Status</h5></div>
+                <div class="py-1 px-2 rounded" [ngClass]="statuscolor">
+                  <h6 class="m-0 getfont">{{ statuscode }}</h6>
+                </div>
+              </div>
+              <div
+                *ngIf="url"
+                class="d-flex align-items-center flex-column mb-3"
+              >
+                <div class="subtitle"><h5>Buy Ticket At:</h5></div>
+                <h6 class="getfont">
+                  <a target="_blank" href="{{ url }}">Ticketmaster</a>
+                </h6>
+              </div>
+            </div>
+            <div
+              class="col-sm-7 pr-3 pl-3 pb-3 text-center order-2 order-sm-2 d-flex justify-content-center"
+            >
+              <div
+                class="d-flex align-items-center justify-content-center"
+                *ngIf="seatmap"
+              >
+                <img class="img-fluid img-s" src="{{ seatmap }}" />
+              </div>
+            </div>
+          </div>
+          <div
+            class="d-flex flex-row align-items-center justify-content-center"
+          >
+            <h6 style="margin: 0px" class="getfont">Share on:</h6>
+
+            <a
+              href="https://twitter.com/intent/tweet?text= Check {{
+                eventtitle
+              }} on Ticketmaster. {{ url }}&hashtags=hashtag1,hashtag2"
+              target="_blank"
+              ><i class="fab fa-fw fa-2xl fa-twitter twittercolor"></i
+            ></a>
+            <a
+              target="_blank"
+              href="https://www.facebook.com/sharer/sharer.php?u={{
+                url
+              }}&amp;src=sdkpreparse"
+              ><i class="fab fa-fw fa-2xl fa-square-facebook facebookcolor"></i
+            ></a>
+          </div>
+        </div>
+      </mat-tab>
+      <mat-tab label="Artist/Teams">
+        <ngb-carousel
+          [interval]="0"
+          *ngIf="artistres && artistres.length > 0"
+          [showNavigationArrows]="true"
+          [showNavigationIndicators]="false"
+        >
+          <ng-template ngbSlide *ngFor="let item of artistres">
+            <div
+              class="py-3"
+              style="padding-left: 7vw; padding-right: 7vw; overflow: hidden"
+            >
+              <div class="row d-flex justify-content-center align-items-center">
+                <div class="col-md-3">
+                  <div
+                    class="d-flex flex-column justify-content-center align-items-center"
+                  >
+                    <img
+                      class="img-fluid rounded-circle img-smaller"
+                      src="{{ item.artist.images[0].url }}"
+                    />
+                    <p style="font-size: 23px" class="subtitle">
+                      {{ item.artist.name }}
+                    </p>
+                  </div>
+                </div>
+                <div class="col-md-3">
+                  <div
+                    class="d-flex flex-column justify-content-center align-items-center"
+                  >
+                    <h5 class="subtitle mt-3">Popularity</h5>
+                    <mat-spinner
+                      class="mt-3"
+                      value="{{ item.artist.popularity }}"
+                      mode="determinate"
+                      [diameter]="35"
+                    ></mat-spinner>
+                    <div class="spinner-text">
+                      <p
+                        style="
+                          margin-top: 78px;
+                          font-weight: 100;
+                          font-size: 12px;
+                        "
+                      >
+                        {{ item.artist.popularity }}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-3">
+                  <div
+                    class="d-flex flex-column justify-content-center align-items-center"
+                  >
+                    <h5 class="subtitle mt-3">Followers</h5>
+                    <h6 class="mt-3">
+                      {{ item.artist.followers.total | number }}
+                    </h6>
+                  </div>
+                </div>
+                <div class="col-md-3">
+                  <div
+                    class="d-flex flex-column justify-content-center align-items-center"
+                  >
+                    <h5 class="subtitle mt-3">Spotify Link</h5>
+                    <a
+                      class="mt-3"
+                      href="{{ item.artist.external_urls.spotify }}"
+                      target="_blank"
+                      ><i class="fa-brands fa-spotify"></i
+                    ></a>
+                  </div>
+                </div>
+              </div>
+
+              <div>
+                <h6 class="subtitle mt-3 mb-3">
+                  Album featuring {{ item.artist.name }}
+                </h6>
+              </div>
+              <div class="row d-flex justify-content-center align-items-center">
+                <div
+                  class="col-md-4 mt-3 d-flex justify-content-center align-items-center"
+                  *ngFor="let album of item.album.items"
+                >
+                  <img
+                    width="100%"
+                    style="max-width: 50vw"
+                    class="img-fluid text-center d-flex justify-content-center align-items-center"
+                    src="{{ album.images[0].url }}"
+                  />
+                </div>
+              </div>
+            </div>
+          </ng-template>
+        </ngb-carousel>
+
+        <div *ngIf="artistres.length === 0" class="container">
+          <div class="row justify-content-center">
+            <div
+              class="col-md-6 text-center bg-white mt-5 mb-5"
+              style="
+                margin-top: 10vh;
+                margin-bottom: 10vh;
+                border-radius: 50px;
+                max-width: 48vw;
+              "
+            >
+              <h6
+                style="
+                  color: rgb(150, 57, 65);
+                  margin: 0px;
+                  font-size: 16px;
+                  font-weight: 700;
+                "
+              >
+                No music related artist details to show
+              </h6>
+            </div>
+          </div>
+        </div>
+      </mat-tab>
+      <mat-tab label="Venue">
+        <div class="container pr-2">
+          <div *ngIf="!venueshow">
+            <div class="row justify-content-center">
+              <div
+                class="col-md-6 text-center bg-white rounded mt-5 mb-5"
+                style="
+                  margin-top: 10vh;
+                  margin-bottom: 10vh;
+                  border-radius: 50px;
+                  max-width: 48vw;
+                "
+              >
+                <h6
+                  style="
+                    color: rgb(150, 57, 65);
+                    margin: 0px;
+                    font-size: 16px;
+                    font-weight: 700;
+                  "
+                >
+                  No venue details to show
+                </h6>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-6">
+              <div>
+                <div *ngIf="venue1" class="text-center">
+                  <h5 class="subtitle me-3 mt-3 mb-1">Name</h5>
+                  <h6 class="getfont">{{ venue1 }}</h6>
+                </div>
+                <div *ngIf="address || city || state" class="text-center">
+                  <h5 class="subtitle me-3 mt-3 mb-1">Address</h5>
+                  <div class="d-flex justify-content-center align-items-center">
+                    <h6 class="getfont">{{ address }}</h6>
+                    <h6 *ngIf="address && city">,</h6>
+                    &nbsp;
+                    <h6 getfont>{{ city }}</h6>
+                    <h6 *ngIf="city && state">,</h6>
+                    &nbsp;
+                    <h6 class="getfont">{{ state }}</h6>
+                  </div>
+                </div>
+                <div *ngIf="phone" class="text-center">
+                  <h5 class="subtitle me-3 mt-3 mb-1">Phone Number</h5>
+                  <h6 class="getfont">{{ phone }}</h6>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div
+                class="d-flex flex-column justify-content-center align-items-center"
+              >
+                <div *ngIf="openhr" class="text-center">
+                  <h5 class="subtitle me-3 mt-3 mb-1">Open Hours</h5>
+                  <div [ngClass]="showmore" class="getfont">
+                    {{ openhr }}
+                  </div>
+                  <a
+                    style="
+                      font-size: 14px;
+                      color: rgb(112, 175, 194);
+                      text-decoration: underline;
+                    "
+                    (click)="changeShow()"
+                    >{{ showmore == "showmore" ? "Show More" : "Show Less"
+                    }}<i
+                      class="bi"
+                      [ngClass]="
+                        showmore == 'showmore'
+                          ? 'bi-chevron-down'
+                          : 'bi-chevron-up'
+                      "
+                    ></i
+                  ></a>
+                </div>
+
+                <div *ngIf="generalrule" class="text-center">
+                  <h5 class="subtitle me-3 mt-3 mb-1">General Rule</h5>
+                  <div [ngClass]="showmore1" class="getfont">
+                    {{ generalrule }}
+                  </div>
+                  <a
+                    style="
+                      font-size: 14px;
+                      color: rgb(112, 175, 194);
+                      text-decoration: underline;
+                    "
+                    (click)="changeShow1()"
+                    >{{ showmore1 == "showmore1" ? "Show More" : "Show Less"
+                    }}<i
+                      class="bi"
+                      [ngClass]="
+                        showmore1 == 'showmore1'
+                          ? 'bi-chevron-down'
+                          : 'bi-chevron-up'
+                      "
+                    ></i
+                  ></a>
+                </div>
+
+                <div *ngIf="childrule" class="text-center">
+                  <h5 class="subtitle me-3 mt-3 mb-1">Child Rule</h5>
+                  <div [ngClass]="showmore2" class="getfont">
+                    {{ childrule }}
+                  </div>
+                  <a
+                    style="
+                      font-size: 14px;
+                      color: rgb(112, 175, 194);
+                      text-decoration: underline;
+                    "
+                    (click)="changeShow2()"
+                    >{{ showmore2 == "showmore2" ? "Show More" : "Show Less"
+                    }}<i
+                      class="bi"
+                      [ngClass]="
+                        showmore2 == 'showmore2'
+                          ? 'bi-chevron-down'
+                          : 'bi-chevron-up'
+                      "
+                    ></i
+                  ></a>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div
+            *ngIf="marker.position.lat != 0 && marker.position.lng != 0"
+            class="row"
+          >
+            <div class="col-md-12 text-center mt-3">
+              <button (click)="openPopup()" class="btn btn-primary mapsbutton">
+                Show venue on Google map
+              </button>
+            </div>
+          </div>
+        </div>
+      </mat-tab>
+    </mat-tab-group>
+    <br />
+  </div>
+</div>
+
+<div
+  class="modal"
+  tabindex="-1"
+  role="dialog"
+  [ngStyle]="{ display: displayStyle }"
+>
+  <div class="modal-dialog" role="document" style="min-width: 35%">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">Event Venue</h4>
+      </div>
+      <div class="modal-body">
+        <div class="my-google-map">
+          <google-map [options]="mapOptions" height="55vh" width="100%">
+            <map-marker [position]="marker.position"></map-marker>
+          </google-map>
+        </div>
+      </div>
+      <div
+        style="
+          justify-content: left;
+          padding: 0px 0px 30px 30px;
+          border-top: 0 none;
+        "
+        class="modal-footer"
+      >
+        <button
+          type="button"
+          style="background-color: black; color: white"
+          class="btn"
+          (click)="closePopup()"
+        >
+          Close
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

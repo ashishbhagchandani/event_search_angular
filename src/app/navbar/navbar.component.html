@@ -1,0 +1,22 @@
+<nav class="d-flex justify-content-end mb-3">
+  <div class="p-2">
+    <button
+      class="nav-link navbutton px-3"
+      [class.active]="activeNav === 'search'"
+      (click)="setActiveNav('search')"
+      routerLink="/search"
+    >
+      Search
+    </button>
+  </div>
+  <div class="p-2">
+    <button
+      class="nav-link navbutton px-3"
+      [class.active]="activeNav === 'favorites'"
+      (click)="setActiveNav('favorites')"
+      routerLink="/favorites"
+    >
+      Favorites
+    </button>
+  </div>
+</nav>
